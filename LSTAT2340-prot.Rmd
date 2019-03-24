@@ -369,6 +369,86 @@ and whether the quantitation is performed in MS1 or MS2.
 |MS1 |XIC        |SILAC, 15N |
 |MS2 |Counting   |iTRAQ, TMT |
 
+## Label-free MS2: Spectral counting
+
+In spectral counting, on simply counts the number of quantified
+peptides that are assigned to a protein.
+
+```{r sc, echo=FALSE}
+knitr::include_graphics("./figure/pbase.png")
+```
+
+## Labelled MS2: Isobaric tagging
+
+Isobaric tagging refers to the labelling using isobaric tags,
+i.e. chemical tags that have the same mass and hence can't be
+distinguish by the spectrometer. The peptides of different samples (4,
+6, 10 or 11) are labelled with different tags and combined prior to
+mass spectrometry acquisition. Given that they are isobaric, all
+identical peptides, irrespective of the tag and this the sample of
+origin, are co-analysed, up to fragmentation prior to MS2
+analysis. During fragmentation, the isobaric tags fall of, fragment
+themselves, and result in a set of sample specific peaks. These
+specific peaks can be used to infer sample-specific quantitation,
+while the rest of the MS2 spectrum is used for identification.
+
+```{r itraq, echo=FALSE}
+knitr::include_graphics("./figure/itraq.png")
+```
+
+## Label-free MS1: extracted ion chromatograms
+
+In label-free quantitation, the precursor peaks that match an
+identified peptide are integrated of retention time and the area under
+that *extracted ion chromatogram* is used to quantify that peptide in
+that sample.
+
+```{r lf, echo=FALSE}
+knitr::include_graphics("./figure/chrompeaks.png")
+```
+
+Figure: credit [Johannes Rainer](https://github.com/jotsetung/).
+
+## Labelled MS1: SILAC
+
+In SILAc quantitation, sample are grown in a medium that contains
+heavy amino acids (typically arginine and lysine). All proteins gown
+in this *heavy* growth medium contain the heavy form of these amino
+acids. Two samples, one grown in heavy medium, and one grown in normal
+(light) medium are then combined and analysed together. The heavy
+peptides precursor peaks are systematically shifted compared to the
+light ones, and the ratio between the height of a heavy and light
+peaks can be used to calculate peptide and protein fold-changes.
+
+
+```{r silab, echo=FALSE}
+knitr::include_graphics("./figure/Silac.png")
+```
+
+Figure: credit Wikimedia Commons.
+
+## Exercise
+
+As its name implies, the `itraqdata` is an iTRAQ-based isobar
+quantitation experiment. We can visualise the reporter peaks as
+follows:
+
+```{r, fig.cap = "Visualisation of the iTRAQ reporter peaks.", echo=TRUE}
+plot(itraqdata[[14]], reporters = iTRAQ4, full = TRUE)
+```
+
+We can quantify these four peaks with the `quantify` method, to
+produce and object of class `MSnSet` containing quantitation data. The
+quantitation values can be accessed with `exprs`.
+
+```{r}
+msnset <- quantify(itraqdata, method = "trap",
+                   reporters = iTRAQ4)
+msnset
+head(exprs(msnset))
+```
+
+
 # Quantitative data processing
 
 
@@ -384,5 +464,3 @@ and whether the quantitation is performed in MS1 or MS2.
 ```{r si, echo=FALSE}
 sessionInfo()
 ```
-
-
