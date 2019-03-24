@@ -14,3 +14,11 @@
   classification, clustering
 
 
+The content can be accessed directly at
+https://uclouvain-cbio.github.io/LSTAT2340/
+
+> This material available under a [**creative common
+> CC-BY**](http://creativecommons.org/licenses/by/4.0/) license. You
+> are free to **share** (copy and redistribute the material in any
+> medium or format) and **adapt** (remix, transform, and build upon
+> the material) for any purpose, even commercially.
