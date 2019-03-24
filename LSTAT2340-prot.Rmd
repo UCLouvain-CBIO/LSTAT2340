@@ -188,17 +188,13 @@ spectra (M/Z and intensity) of retention time, as well as the
 interleaved nature of MS1 and MS2 (and there could be more levels)
 data.
 
-```{r ms1s, results='markup', fig.margin=FALSE, fig.cap="MS1 spectra over retention time.", echo=FALSE}
-knitr::include_graphics("figure/F02-3D-MS1-scans-400-1200-lattice.png")
-```
-
-```{r ms12, results='markup', fig.margin=FALSE, fig.cap="MS2 spectra interleaved between two MS1 spectra.", echo=FALSE}
-knitr::include_graphics("figure/F02-3D-MS1-MS2-scans-100-1200-lattice.png")
+```{r ms1s, results='markup', fig.margin=FALSE, fig.cap="MS1 spectra (blue) over retention time (left). MS2 spectra (pink) interleaved between two MS1 spectra (right),", echo=FALSE, fig.fullwidth=TRUE}
+knitr::include_graphics("figure/ms3D.png")
 ```
 
 \newpage
 
-## Practical: reading and accessing MS data
+# Reading and accessing MS data
 
 Let's read a very small raw MS data file into R using the `readMSData`
 from the `MSnbase` package. The file that we are going to load is also
