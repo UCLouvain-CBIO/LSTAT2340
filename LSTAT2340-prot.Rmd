@@ -16,11 +16,11 @@ link-citations: yes
 ---
 
 
-This material available under a [**creative common
-CC-BY**](http://creativecommons.org/licenses/by/4.0/) license. You are
-free to **share** (copy and redistribute the material in any medium or
-format) and **adapt** (remix, transform, and build upon the material)
-for any purpose, even commercially.
+> This material available under a [**creative common
+> CC-BY**](http://creativecommons.org/licenses/by/4.0/) license. You
+> are free to **share** (copy and redistribute the material in any
+> medium or format) and **adapt** (remix, transform, and build upon
+> the material) for any purpose, even commercially.
 
 # Biological information flow 
 
@@ -487,10 +487,53 @@ other omics data.
 
 # Applications in statistical learning
 
-- hypothesis testing
-- classification
-- clustering
+```{r sticker2, fig.cap = "The `pRoloc` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("figure/pRoloc.png")
+```
 
+In this section, I illustrate a use case of mass spectrometry-based
+proteomics to infer sub-cellular protein localisation and the
+application of statistical learning. This section requires the
+`pRoloc` and `pRolocdata` packages [@Gatto:2014a;@Breckels:2016]. Both
+packages can be installed with the `BiocManager::install` function, as
+illustrated above.
+
+```{r, message=FALSE}
+library("pRoloc")
+library("pRolocdata")
+```
+
+
+The `hyperLOPIT2015` data contains localisation data for 5032 proteins
+in mouse embryonic stem cells [@Christoforou:2016]. The protein
+information is collected along a 20 fraction density gradient - our
+data matrix has dimensions 5032 rows and 20 columns. We use PCA to
+easily visualise it in 2 dimensions.
+
+```{r, fig.cap = "Mouse stem cell spatial proteomics data from Christoforou et al.", fig.asp = 1}
+data(hyperLOPIT2015)
+## set colours
+setStockcol(paste0(getStockcol(), 80))
+## produce PCA plot
+plot2D(hyperLOPIT2015)
+```
+
+Each dot on the PCA plot represents a single protein. The protein is
+either of unknown localisation, and represented by a grey circle, or
+is of known localisation (and called an organelle marker) and is
+coloured according to its expected sub-cellular localisation.
+
+
+In the next figure, we have trained an support vector machine (SVM)
+model and classified proteins of unknown localisation using an SVM
+model. The size of the dots are scaled according to the classifier
+score and only assignments corresponding to a false discovery rate of
+5% have been considered.
+
+```{r, fig.cap = "New sub-cellular assignment after using support vector machine classifier.", fig.asp = 1}
+sz <- exp(fData(hyperLOPIT2015)$svm.score) - 1
+plot2D(hyperLOPIT2015, fcol = "final.assignment", cex = sz)
+```
 
 # Session information
 
