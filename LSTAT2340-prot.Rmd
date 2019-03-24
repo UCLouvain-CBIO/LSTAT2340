@@ -439,18 +439,51 @@ plot(itraqdata[[14]], reporters = iTRAQ4, full = TRUE)
 
 We can quantify these four peaks with the `quantify` method, to
 produce and object of class `MSnSet` containing quantitation data. The
-quantitation values can be accessed with `exprs`.
+quantitation values can be accessed with `exprs`. This data also
+contains feature metadata that can be accessed with the `fData`
+function.
+
 
 ```{r}
 msnset <- quantify(itraqdata, method = "trap",
                    reporters = iTRAQ4)
 msnset
 head(exprs(msnset))
+head(fData(msnset))
 ```
-
 
 # Quantitative data processing
 
+In our examples, we not have processing data for the 55 peptides and 4
+samples. In this data, there is only 1 missing value, corresponding to
+an absent reporter peak. We are going to simply drop that feature.
+
+
+```{r}
+table(is.na(exprs(msnset)))
+msnset <- filterNA(msnset)
+```
+
+In MS1 label-free experiments, given that each sample is acquired
+independently, the proportion of missing values can be as high several
+tens of percent. In such situations, removing rows with missing values
+isn't possible at all. Imputation is possible, albeit tricky, as
+different mechanisms can be responsible for missing value that appear
+either at random or not at random [@Lazar:2016].
+
+Next, we aggregate the spectrum-level quantitation values into
+protein-level data using the median and the `combineFeatures`
+function:
+
+```{r}
+prots <- combineFeatures(msnset, fcol = "ProteinAccession",
+                         method = "median")
+head(exprs(prots))
+```
+
+Following on from here, many data processing such as normalisation,
+non-specific filtering, and hypothesis testing is very similar to
+other omics data.
 
 # Applications in statistical learning
 
