@@ -284,6 +284,10 @@ formatRt(range(rtime(itraqdata)))
 ```
 </details>
 
+This object also contains additional metadata for each spectrum, that
+can be accessed, as a `data.frame`, with `fData`.
+
+
 # Identification
  
 The raw data is still a long way of obtaining biologically relevant
@@ -316,9 +320,25 @@ s <- "SIGFEGDSIGR"
 plot(itraqdata2[[14]], s, main = s)
 ```
 
+It is also possible to plot 2 spectra to compare them directly.
+
+```{r, fig.cap = "Direct comparison of 2 MS2 spectra."}
+plot(itraqdata2[[25]], itraqdata2[[28]],
+     sequences = rep("IMIDLDGTENK", 2))
+```
+
 In a full experiment, all possible peptides from the known (or
-relevant) proteome of interest are compared to the millions of
-observed spectra.
+relevant) proteome of interest (such as databases that can be
+downloaded from the [UniProt
+site](https://www.uniprot.org/)[^uniprot]) are compared to the
+millions of observed spectra.
+
+[^uniprot]: The Universal Protein Resource (UniProt) is a freely and
+    accessible comprehensive resource for protein sequence and
+    annotation data.
+
+From the list of identified petides, it is then necessary to infer the
+most propable proteins that were present in the biological sample.
 
 ## Exercise
 
@@ -329,13 +349,34 @@ can be accessed in the feature metadata with
 fData(itraqdata2)$PeptideSequence[[44]]
 ```
 
+<details>
+```{r}
+plot(itraqdata2[[44]], s,
+     main = fData(itraqdata2)$PeptideSequence[[44]])
+```
+</details>
 
 # Quantitation
+
+The last step of MS data processing is to quantify peptide abundances
+in the biological samples. The table below summarises the different
+possibilites depending whether the proteins or peptides are labelled,
+and whether the quantitation is performed in MS1 or MS2.
+
+
+|    |Label-free |Labelled   |
+|:---|:----------|:----------|
+|MS1 |XIC        |SILAC, 15N |
+|MS2 |Counting   |iTRAQ, TMT |
 
 # Quantitative data processing
 
 
-# Applications in statistical learning: hypthesis testing, classification, clustering
+# Applications in statistical learning
+
+- hypothesis testing
+- classification
+- clustering
 
 
 # Session information
