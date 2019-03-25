@@ -62,7 +62,7 @@ same genome. The complement of all the expressed proteins, termed the
 proteome is however very different.
 
 
-```{r metam, results='markup', fig.margin=FALSE, fig.cap="The metamorphosis from a caterpilar to a monarch butterfly. (Image from Phys.prg)", fig.width=5, fig.height=5, echo=FALSE}
+```{r metam, results='markup', fig.margin=FALSE, fig.cap="The metamorphosis from a caterpilar to a monarch butterfly. (Image from Phys.prg)", echo=FALSE, out.width = "100%"}
 knitr::include_graphics("figure/metam.jpg")
 ```
 
@@ -118,7 +118,7 @@ GC). The time an analytes takes to elute from the chromatography
 column is the *retention time*.
 
 
-```{r chrom, results='markup', fig.margin=FALSE, fig.cap="A chromatogram, illustrating the total amount of analytes over the retention time.", echo=FALSE}
+```{r chrom, fig.cap="A chromatogram, illustrating the total amount of analytes over the retention time.", echo=FALSE, out.width = "100%"}
 knitr::include_graphics("./figure/chromatogram.png")
 ```
 
@@ -158,7 +158,7 @@ the observed, experimental spectrum to theoratical spectra (see
 details below).
 
 
-```{r ms2, results='markup', fig.margin=FALSE, fig.cap="Schematics of a mass spectrometer and two rounds of MS.", echo=FALSE}
+```{r ms2, fig.cap="Schematics of a mass spectrometer and two rounds of MS.", echo=FALSE, out.width = "100%"}
 knitr::include_graphics("figure/SchematicMS2.png")
 ```
 
@@ -167,7 +167,7 @@ different M/Z values) are separated throughout the MS analysis and are
 eventually detected (i.e. quantified). The final frame shows the
 hypothetical spectrum.
 
-```{r mstut, results='markup', fig.margin=FALSE, fig.cap="Separation and detection of ions in a mass spectrometer.", echo=FALSE}
+```{r mstut, fig.cap="Separation and detection of ions in a mass spectrometer.", echo=FALSE, out.width = "80%"}
 knitr::include_graphics("figure/mstut.gif")
 ```
 
@@ -179,7 +179,7 @@ red (orange) vertical line on the MS1 spectrum and the fragment
 spectra are shown on the MS2 spectrum on the top (bottom) right
 figure.
 
-```{r ms, results='markup', fig.margin=FALSE, fig.cap="Parent ions in the MS1 spectrum (left) and two sected fragment ions MS2 spectra (right).", echo=FALSE}
+```{r ms, fig.cap="Parent ions in the MS1 spectrum (left) and two sected fragment ions MS2 spectra (right).", echo=FALSE, out.width = "100%"}
 knitr::include_graphics("figure/MS1-MS2-spectra.png")
 ```
 
@@ -188,7 +188,7 @@ spectra (M/Z and intensity) of retention time, as well as the
 interleaved nature of MS1 and MS2 (and there could be more levels)
 data.
 
-```{r ms1s, results='markup', fig.margin=FALSE, fig.cap="MS1 spectra (blue) over retention time (left). MS2 spectra (pink) interleaved between two MS1 spectra (right),", echo=FALSE, fig.fullwidth=TRUE}
+```{r ms1s, fig.cap="MS1 spectra (blue) over retention time (left). MS2 spectra (pink) interleaved between two MS1 spectra (right),", echo=FALSE, fig.fullwidth=TRUE, out.width = "90%"}
 knitr::include_graphics("figure/ms3D.png")
 ```
 
@@ -337,13 +337,24 @@ millions of observed spectra.
 ```{marginfigure}
 **Statistical challenge** The matching between millions of observed
   and possible spectra causes real challenges due to the large search
-  space and the risk of false positives. See [@Kall:2008] for futher
+  space and the risk of false positives. See [@Kall:2008] for further
   reading.
 ```
 
 
-From the list of identified petides, it is then necessary to infer the
-most propable proteins that were present in the biological sample.
+From the list of identified peptides, it is then necessary to infer the
+most provable proteins that were present in the biological sample.
+
+```{marginfigure}
+**Statistical challenge** Protein inference is a difficult task, as
+  peptides often match multiple proteins (either different isoforms or
+  proteins stemming from different gene but with identical domains),
+  which leads to the definition of protein groups, i.e. sets of
+  proteins that can't be distinguished with the set of identified
+  peptides at hand. See [@Nesvizhskii:2005] for further reading.
+
+```
+
 
 ## Exercise
 
@@ -379,7 +390,7 @@ and whether the quantitation is performed in MS1 or MS2.
 In spectral counting, on simply counts the number of quantified
 peptides that are assigned to a protein.
 
-```{r sc, echo=FALSE}
+```{r sc, echo=FALSE, out.width = "75%"}
 knitr::include_graphics("./figure/pbase.png")
 ```
 
@@ -397,7 +408,7 @@ themselves, and result in a set of sample specific peaks. These
 specific peaks can be used to infer sample-specific quantitation,
 while the rest of the MS2 spectrum is used for identification.
 
-```{r itraq, echo=FALSE}
+```{r itraq, echo=FALSE, out.width = "75%"}
 knitr::include_graphics("./figure/itraq.png")
 ```
 
@@ -408,7 +419,7 @@ identified peptide are integrated of retention time and the area under
 that *extracted ion chromatogram* is used to quantify that peptide in
 that sample.
 
-```{r lf, echo=FALSE}
+```{r lf, echo=FALSE, out.width = "75%"}
 knitr::include_graphics("./figure/chrompeaks.png")
 ```
 
@@ -426,11 +437,21 @@ light ones, and the ratio between the height of a heavy and light
 peaks can be used to calculate peptide and protein fold-changes.
 
 
-```{r silab, echo=FALSE}
+```{r silab, echo=FALSE, out.width = "75%"}
 knitr::include_graphics("./figure/Silac.png")
 ```
 
 Figure: credit Wikimedia Commons.
+
+```{marginfigure}
+**Statistical challenge** These different quantitation techniques come
+  with their respective and distinct challenges, such as large
+  quantities of raw data processing, data transformation and
+  normalisation, and different underlying statistical models for the
+  quantitative data (count data for spectral counting, continuous data
+  for the others).
+```
+
 
 ## Exercise
 
@@ -458,6 +479,13 @@ head(fData(msnset))
 ```
 
 # Quantitative data processing
+
+```{marginfigure}
+**Statistical challenge** Quantitative data processing come with
+  numerous statistical challenges such as missing data handling,
+  aggregation of quantitation data, data normalisation, ... and the
+  effect of these on the downstream statistical tests.
+```
 
 In our examples, we not have processing data for the 55 peptides and 4
 samples. In this data, there is only 1 missing value, corresponding to
@@ -489,6 +517,7 @@ head(exprs(prots))
 Following on from here, many data processing such as normalisation,
 non-specific filtering, and hypothesis testing is very similar to
 other omics data.
+
 
 # Applications in statistical learning
 
@@ -547,4 +576,3 @@ sessionInfo()
 ```
 
 # References
-

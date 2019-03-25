@@ -1,5 +1,4 @@
 make all:
-	make LSTAT2340-prot.pdf
 	make LSTAT2340-prot.html
 	make docs/index.html
 
