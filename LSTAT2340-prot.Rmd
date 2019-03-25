@@ -22,7 +22,7 @@ link-citations: yes
 > medium or format) and **adapt** (remix, transform, and build upon
 > the material) for any purpose, even commercially.
 
-# Biological information flow 
+# Biological information flow
 
 ```{r infoflow, results='markup', fig.margin=TRUE, fig.cap="Information flow in biological systems (Source *Central dogma of biology* on Wikipedia).", fig.width=5, fig.height=5, echo=FALSE}
 knitr::include_graphics("figure/centraldogma.png")
@@ -42,7 +42,7 @@ processed into its mature *exon*-only form after removal of the
 non-coding *introns* sequences. Finally, the mRNA is translated by the
 ribosomial machinery into **proteins** directly into the endoplasmic
 reticulum (ER) where they are then redirected to their final
-destination. 
+destination.
 
 ```{r cell, results='markup', fig.margin=FALSE, fig.cap="Sub-cellular structure of an animal cell (Source *Cell biology* on Wikipedia).", fig.width=5, fig.height=5, echo=FALSE}
 knitr::include_graphics("figure/cell.png")
@@ -72,7 +72,7 @@ biological samples, it is also important to study the interactions
 between proteins forming protein-protein complexes, the presence of
 post-transcriptional modification (such as, for example,
 phosphorylations), the rate at which proteins are produced and
-degrated, or where the proteins reside inside a cell. 
+degrated, or where the proteins reside inside a cell.
 
 The technique of choice to study proteins in a high throughput way is
 *mass spectrometry*.
@@ -93,7 +93,7 @@ computer, install it with:
 install.packages("BiocManager")
 ```
 
-Now, install `MSnbase` and its dependencies with 
+Now, install `MSnbase` and its dependencies with
 
 ```{r setup2, eval = FALSE}
 BiocManager::install("MSnbase")
@@ -233,7 +233,7 @@ class(x)
 4. We can find out how many spectra are available in that data using
    the function `length`. Full MS acquisitions would contain hundreds
    of thousands spectra.
-   
+
 ```{r}
 length(x)
 ```
@@ -249,7 +249,7 @@ precursorMz(x)
 precursorIntensity(x)
 ```
 
-6. We can also extract individual spectra using `[[` and plot them. 
+6. We can also extract individual spectra using `[[` and plot them.
 
 ```{r}
 x[[3]]
@@ -285,7 +285,7 @@ can be accessed, as a `data.frame`, with `fData`.
 
 
 # Identification
- 
+
 The raw data is still a long way of obtaining biologically relevant
 proteomics data. The first step to obtain proteomics data is to
 identify the peptides that have been acquired in the MS. Peptide
@@ -311,7 +311,7 @@ The last step is to compare obseved and expected peaks. If there is a
 good match, the MS2 spectrum is assigned the peptide sequence.
 
 ```{r, echo=TRUE, fig.cap = "Matching observed and expected peaks."}
-itraqdata2 <- pickPeaks(itraqdata, verbose = FALSE) 
+itraqdata2 <- pickPeaks(itraqdata, verbose = FALSE)
 s <- "SIGFEGDSIGR"
 plot(itraqdata2[[14]], s, main = s)
 ```
@@ -333,13 +333,22 @@ millions of observed spectra.
     accessible comprehensive resource for protein sequence and
     annotation data.
 
+
+```{marginfigure}
+**Statistical challenge** The matching between millions of observed
+  and possible spectra causes real challenges due to the large search
+  space and the risk of false positives. See [@Kall:2008] for futher
+  reading.
+```
+
+
 From the list of identified petides, it is then necessary to infer the
 most propable proteins that were present in the biological sample.
 
 ## Exercise
 
 Plot the 44th spectrum of the `itraqdata2` experiment. The sequence
-can be accessed in the feature metadata with 
+can be accessed in the feature metadata with
 
 ```{r}
 fData(itraqdata2)$PeptideSequence[[44]]
