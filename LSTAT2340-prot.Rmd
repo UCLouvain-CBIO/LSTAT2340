@@ -12,7 +12,7 @@ output:
     citation_package: natbib
     latex_engine: xelatex
 bibliography: refs.bib
-link-citations: yes
+link-citations: no
 ---
 
 
@@ -545,3 +545,6 @@ plot2D(hyperLOPIT2015, fcol = "final.assignment", cex = sz)
 ```{r si, echo=FALSE}
 sessionInfo()
 ```
+
+# References
+
