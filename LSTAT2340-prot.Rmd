@@ -62,7 +62,7 @@ same genome. The complement of all the expressed proteins, termed the
 proteome is however very different.
 
 
-```{r metam, results='markup', fig.margin=FALSE, fig.cap="The metamorphosis from a caterpilar to a monarch butterfly. (Image from Phys.prg)", echo=FALSE, out.width = "100%"}
+```{r metam, results='markup', fig.margin=FALSE, fig.cap="The metamorphosis from a caterpilar to a monarch butterfly. (Image from Phys.org)", echo=FALSE, out.width = "100%"}
 knitr::include_graphics("figure/metam.jpg")
 ```
 
