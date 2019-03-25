@@ -44,7 +44,7 @@ ribosomial machinery into **proteins** directly into the endoplasmic
 reticulum (ER) where they are then redirected to their final
 destination.
 
-```{r cell, results='markup', fig.margin=FALSE, fig.cap="Sub-cellular structure of an animal cell (Source *Cell biology* on Wikipedia).", fig.width=5, fig.height=5, echo=FALSE}
+```{r cell, fig.cap="Sub-cellular structure of an animal cell (Source *Cell biology* on Wikipedia).", echo=FALSE, out.width = "100%"}
 knitr::include_graphics("figure/cell.png")
 ```
 In addition to the standard information worflow where DNA is
