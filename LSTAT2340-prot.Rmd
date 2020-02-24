@@ -48,8 +48,8 @@ destination.
 knitr::include_graphics("figure/cell.png")
 ```
 In addition to the standard information worflow where DNA is
-transcribed into RNA that itself is translated into proteins,
-information flow, there is also reverse transcription, that generates
+transcribed into RNA that itself is translated into proteins, 
+there is also reverse transcription, that generates
 (complementary) DNA from and RNA molecule, as well as replication of
 DNA (during cell division) and RNA molecules.
 
