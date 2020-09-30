@@ -77,6 +77,11 @@ degrated, or where the proteins reside inside a cell.
 The technique of choice to study proteins in a high throughput way is
 *mass spectrometry*.
 
+*A beginner's guide to mass spectrometry–based proteomics*
+[@Sinha:2020] is an approachable intoduction to sample preparation,
+mass spectrometry and data analysis.
+
+
 # Setup
 
 ```{r sticker, fig.cap = "The `MSnbase` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
