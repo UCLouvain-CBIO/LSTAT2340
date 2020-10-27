@@ -72,13 +72,13 @@ biological samples, it is also important to study the interactions
 between proteins forming protein-protein complexes, the presence of
 post-transcriptional modification (such as, for example,
 phosphorylations), the rate at which proteins are produced and
-degrated, or where the proteins reside inside a cell.
+degraded, or where the proteins reside inside a cell.
 
 The technique of choice to study proteins in a high throughput way is
 *mass spectrometry*.
 
 *A beginner's guide to mass spectrometry–based proteomics*
-[@Sinha:2020] is an approachable intoduction to sample preparation,
+[@Sinha:2020] is an approachable introduction to sample preparation,
 mass spectrometry and data analysis.
 
 
