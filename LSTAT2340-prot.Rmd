@@ -468,6 +468,21 @@ follows:
 plot(itraqdata[[14]], reporters = iTRAQ4, full = TRUE)
 ```
 
+Interpret the figure above.
+
+<details>
+
+From the closed-up panel, we see that the 4 reporter ions indicate that there
+was slightly less of that peptide in the two first samples, i.e. those labelled 
+with the 114 and 115 reporters.
+
+The rest of the spectrum (i.e m/z > 120) correspond to the dissociated 
+fragment ions, used for identification.
+
+</details>
+
+
+## Quantification 
 We can quantify these four peaks with the `quantify` method, to
 produce and object of class `MSnSet` containing quantitation data. The
 quantitation values can be accessed with `exprs`. This data also
