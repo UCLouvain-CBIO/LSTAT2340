@@ -48,7 +48,7 @@ destination.
 knitr::include_graphics("figure/cell.png")
 ```
 In addition to the standard information worflow where DNA is
-transcribed into RNA that itself is translated into proteins, 
+transcribed into RNA that itself is translated into proteins,
 there is also reverse transcription, that generates
 (complementary) DNA from and RNA molecule, as well as replication of
 DNA (during cell division) and RNA molecules.
@@ -113,6 +113,15 @@ spectrometry-](http://bioconductor.org/packages/release/BiocViews.html#___MassSp
 packages on the Bioconductor page
 
 
+The recent [R for Mass
+Spectrometry](https://www.rformassspectrometry.org/) initiative, and
+the [documetation book](https://rformassspectrometry.github.io/docs/)
+provide further details and state-of-the-art infrastructure for MS and
+proteomics data analysis.
+
+```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("./figure/RforMassSpectrometry.png")
+```
 
 # How does mass spectrometry work?
 
@@ -473,16 +482,16 @@ Interpret the figure above.
 <details>
 
 From the closed-up panel, we see that the 4 reporter ions indicate that there
-was slightly less of that peptide in the two first samples, i.e. those labelled 
+was slightly less of that peptide in the two first samples, i.e. those labelled
 with the 114 and 115 reporters.
 
-The rest of the spectrum (i.e m/z > 120) correspond to the dissociated 
+The rest of the spectrum (i.e m/z > 120) correspond to the dissociated
 fragment ions, used for identification.
 
 </details>
 
 
-## Quantification 
+## Quantification
 We can quantify these four peaks with the `quantify` method, to
 produce and object of class `MSnSet` containing quantitation data. The
 quantitation values can be accessed with `exprs`. This data also
@@ -541,7 +550,7 @@ other omics data.
 
 # Applications in statistical learning
 
-```{r sticker2, fig.cap = "The `pRoloc` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
+```{r sticker3, fig.cap = "The `pRoloc` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
 knitr::include_graphics("figure/pRoloc.png")
 ```
 
