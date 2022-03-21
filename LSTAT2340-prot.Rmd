@@ -89,8 +89,8 @@ knitr::include_graphics("figure/MSnbase.png")
 ```
 
 We are going to use the Bioconductor [@Huber:2015] `MSnbase` package
-[@Gatto:2012], which can be install with the `BiocManager` package,
-available from CRAN. If `BiocManager` isn't available on your
+[@Gatto:2012;@Gatto:2020], which can be install with the `BiocManager`
+package, available from CRAN. If `BiocManager` isn't available on your
 computer, install it with:
 
 
