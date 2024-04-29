@@ -75,33 +75,44 @@ phosphorylations), the rate at which proteins are produced and
 degraded, or where the proteins reside inside a cell.
 
 The technique of choice to study proteins in a high throughput way is
-*mass spectrometry*.
-
-*A beginner's guide to mass spectrometry–based proteomics*
-[@Sinha:2020] is an approachable introduction to sample preparation,
-mass spectrometry and data analysis.
+*mass spectrometry*. *A beginner's guide to mass spectrometry–based
+proteomics* [@Sinha:2020] is an approachable introduction to sample
+preparation, mass spectrometry and data analysis.
 
 
 # Setup
 
-```{r sticker, fig.cap = "The `MSnbase` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
-knitr::include_graphics("figure/MSnbase.png")
+We are going to use packages from the [R for Mass
+Spectrometry](https://www.rformassspectrometry.org/) initiative for
+this tutorial. For a more extensive introduction, readers are invited
+to look at the [documetation
+book](https://rformassspectrometry.github.io/book/), that provides
+further details and state-of-the-art infrastructure for MS and
+proteomics data analysis.
+
+```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("./figure/RforMassSpectrometry.png")
 ```
 
-We are going to use the Bioconductor [@Huber:2015] `MSnbase` package
-[@Gatto:2012;@Gatto:2020], which can be install with the `BiocManager`
-package, available from CRAN. If `BiocManager` isn't available on your
-computer, install it with:
+The *R for Mass Spectrometry* ecosystem is available as part of the
+[Bioconductor project](https://bioconductor.org/) [@Huber:2015], and
+we'll use the `BiocManager` package, available from CRAN. If
+`BiocManager` isn't available on your computer, install it with:
 
 
 ```{r setup1, eval = FALSE}
 install.packages("BiocManager")
 ```
 
-Now, install `MSnbase` and its dependencies with
+Now, install the necessary packages, namely
+- [MsDataHub](https://rformassspectrometry.github.io/MsDataHub/) to access data
+- [Spectra](https://rformassspectrometry.github.io/Spectra/) for raw MS data
+- [PSMatch](https://rformassspectrometry.github.io/PSMatch/) for identification data
+- [QFeatures](https://rformassspectrometry.github.io/QFeatures/) for quantitative data
 
 ```{r setup2, eval = FALSE}
-BiocManager::install("MSnbase")
+pkgs <- c("MsDataHub", "Spectra", "PSMatch", "QFeatures", "mzR")
+BiocManager::install(pkgs)
 ```
 
 For additional information on how to analyse mass spectrometry-based
@@ -110,18 +121,7 @@ the the
 [proteomics-](http://bioconductor.org/packages/release/BiocViews.html#___Proteomics)
 and [mass
 spectrometry-](http://bioconductor.org/packages/release/BiocViews.html#___MassSpectrometry)related
-packages on the Bioconductor page
-
-
-The recent [R for Mass
-Spectrometry](https://www.rformassspectrometry.org/) initiative, and
-the [documetation book](https://rformassspectrometry.github.io/docs/)
-provide further details and state-of-the-art infrastructure for MS and
-proteomics data analysis.
-
-```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
-knitr::include_graphics("./figure/RforMassSpectrometry.png")
-```
+packages on the Bioconductor page.
 
 # How does mass spectrometry work?
 
@@ -208,37 +208,60 @@ knitr::include_graphics("figure/ms3D.png")
 
 \newpage
 
-# Reading and accessing MS data
+# Accessing data
 
-Let's read a very small raw MS data file into R using the `readMSData`
-from the `MSnbase` package. The file that we are going to load is also
-available in the package.
+We will use the `MsDataHub` package to access various types of
+MS-based proteomics data: raw data, identification data, and
+quantitative data.
 
-1. Load the `MSnbase` package
-```{r loadmsnbase, message = FALSE}
-library("MSnbase")
+```{r hub, message = FALSE}n
+library("MsDataHub")
 ```
 
-2. Get the path to the `dummyiTRAQ.mzXML` file
+Here's a table with all data that can be accessed with the `MsDataHub`
+package:
+
+```{r hub2, message = FALSE}
+DT::datatable(MsDataHub())
+```
+
+Each file can be downloaded (and cached) individually with a function
+that has the same name as the file. For example, for the raw data
+file:
+
+```{r hub3}
+(raw_file <- TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01.20141210.mzML.gz())
+```
+
+# Reading and accessing MS data
+
+Let's read a raw MS data file into R using the `Spectra()` function
+from the `Spectra` package.
+
+
+1. Load the `Spectra` package:
+```{r loadmsnbase, message = FALSE}
+library("Spectra")
+```
+
+2. Get the path to the file name:
 
 ```{r rawf, message = FALSE}
-rawf <- dir(system.file(package = "MSnbase", dir = "extdata"),
-            full.name = TRUE,
-            pattern = "mzXML$")
-basename(rawf)
+raw_file <- TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01.20141210.mzML.gz()
+basename(raw_file)
 ```
 
 3. Read it in using the `readMSData` function.
 
 ```{r readms}
-x <- readMSData(rawf)
+x <- Spectra(raw_file)
 x
 ```
 
-The object that is returned by `readMSData` is of class `MSnExp`, that
-can store, access and manipulate raw MS data. Note that here we are
-focusing on MS-based proteomics data, but this also applied to
-MS-based metabolomics data.
+The object that is returned is of class `Spectra`, that can store,
+access and manipulate raw MS data. Note that here we are focusing on
+MS-based proteomics data, but this also applied to MS-based
+metabolomics data.
 
 ```{r}
 class(x)
@@ -257,46 +280,37 @@ length(x)
    precursor peaks of the ion corresponding to the MS2 spectra.
 
 ```{r}
-msLevel(x)
-rtime(x)
-precursorMz(x)
-precursorIntensity(x)
+msLevel(x)[1000:1100]
+rtime(x)[1000:1100]
+precursorMz(x)[1000:1100]
+precursorIntensity(x)[1000:1100]
 ```
 
-6. We can also extract individual spectra using `[[` and plot them.
+6. We can also extract `Spectra` substets using `[` and plot them.
 
 ```{r}
-x[[3]]
+x[1000]
 ```
 
-```{r, fig.cap = "Visualisation of the 3rd MS spectrum in our small test data set."}
-plot(x[[3]])
+```{r, fig.cap = "Visualisation of the 1000th MS spectrum in our test data set."}
+plotSpectra(x[1000])
 ```
 
 ## Exercise
 
-For the rest of this tutorial, we will be using a
-slightly larger dataset (still tiny compared to full acquisitions)
-that is distributed with the `MSnbase` package. Load it as shown below
-and compute the number of spectra available in that dataset, their MS
-level, and the retention time range over which these spectra have been
-acquired.
-
-```{r}
-data(itraqdata)
-```
+Calculate the number of MS1 and MS2 scans and the retention time range
+over which these spectra have been acquired.
 
 <details>
 ```{r}
-length(itraqdata)
-unique(msLevel(itraqdata))
-formatRt(range(rtime(itraqdata)))
+table(msLevel(x))
+formatRt(range(rtime(x)))
+MsCoreUtils::formatRt(range(rtime(x)))
 ```
 </details>
 
 This object also contains additional metadata for each spectrum, that
-can be accessed, as a `data.frame`, with `fData`.
-
+can be accessed, as a `DataFrame`, with `spectraData()`.
 
 # Identification
 
@@ -318,24 +332,65 @@ a given peptide, such as *SIGFEGDSIGR* below.
 
 
 ```{r calcfrag}
-calculateFragments("SIGFEGDSIGR")
+library(PSMatch)
+calculateFragments("THSQEEMQHMQR")
 ```
 
-The last step is to compare obseved and expected peaks. If there is a
-good match, the MS2 spectrum is assigned the peptide sequence.
+Let's load a identification result file:
 
-```{r, echo=TRUE, fig.cap = "Matching observed and expected peaks."}
-itraqdata2 <- pickPeaks(itraqdata, verbose = FALSE)
-s <- "SIGFEGDSIGR"
-plot(itraqdata2[[14]], s, main = s)
+```{r idf}
+(id_file <- MsDataHub::TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01.20141210.mzid())
+id <- PSM(id_file)
+id
 ```
 
-It is also possible to plot 2 spectra to compare them directly.
 
-```{r, fig.cap = "Direct comparison of 2 MS2 spectra."}
-plot(itraqdata2[[25]], itraqdata2[[28]],
-     sequences = rep("IMIDLDGTENK", 2))
+Here, we are going to do a quick filter (more details in the [package
+vignette](https://rformassspectrometry.github.io/PSMatch/articles/PSM.html)),
+to keep only the most reliable identification results.
+
+```{r filter}
+id_filtered <- PSMatch::filterPSMs(id)
 ```
+
+Let's add the matches/identifications to the raw data...
+
+```{r join}
+spectraVariables(x) ## before
+x <- joinSpectraData(x, id_filtered,
+                     by.x = "spectrumId",
+                     by.y = "spectrumID")
+spectraVariables(x) ## after
+```
+
+
+... and plot on MS2 with it's identification results:
+
+```{r plotwithid}
+plotSpectra(sp[983], labels = addFragments,
+            labelPos = 3, labelCol = "steelblue")
+```
+
+
+## Exercise
+
+The sequence matched to spectrum 983 can be accessed from the raw data:
+
+```{r}
+x$sequence[983]
+```
+
+Find a second scan that was matched that same peptide sequence, and
+compare both with `Spectra::plotSpectraMirror()`.
+
+
+<details>
+```{r}
+(i <- which(sp$sequence == "THSQEEMQHMQR"))
+Spectra::plotSpectraMirror(x[i[1]], x[i[2]])
+```
+</details>
+
 
 In a full experiment, all possible peptides from the known (or
 relevant) proteome of interest (such as databases that can be
@@ -368,23 +423,6 @@ most provable proteins that were present in the biological sample.
   peptides at hand. See [@Nesvizhskii:2005] for further reading.
 
 ```
-
-
-## Exercise
-
-Plot the 44th spectrum of the `itraqdata2` experiment. The sequence
-can be accessed in the feature metadata with
-
-```{r}
-fData(itraqdata2)$PeptideSequence[[44]]
-```
-
-<details>
-```{r}
-plot(itraqdata2[[44]], s,
-     main = fData(itraqdata2)$PeptideSequence[[44]])
-```
-</details>
 
 # Quantitation
 
@@ -467,45 +505,6 @@ Figure: credit Wikimedia Commons.
 ```
 
 
-## Exercise
-
-As its name implies, the `itraqdata` is an iTRAQ-based isobar
-quantitation experiment. We can visualise the reporter peaks as
-follows:
-
-```{r, fig.cap = "Visualisation of the iTRAQ reporter peaks.", echo=TRUE}
-plot(itraqdata[[14]], reporters = iTRAQ4, full = TRUE)
-```
-
-Interpret the figure above.
-
-<details>
-
-From the closed-up panel, we see that the 4 reporter ions indicate that there
-was slightly less of that peptide in the two first samples, i.e. those labelled
-with the 114 and 115 reporters.
-
-The rest of the spectrum (i.e m/z > 120) correspond to the dissociated
-fragment ions, used for identification.
-
-</details>
-
-
-## Quantification
-We can quantify these four peaks with the `quantify` method, to
-produce and object of class `MSnSet` containing quantitation data. The
-quantitation values can be accessed with `exprs`. This data also
-contains feature metadata that can be accessed with the `fData`
-function.
-
-
-```{r}
-msnset <- quantify(itraqdata, method = "trap",
-                   reporters = iTRAQ4)
-msnset
-head(exprs(msnset))
-head(fData(msnset))
-```
 
 # Quantitative data processing
 
