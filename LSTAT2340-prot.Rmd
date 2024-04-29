@@ -115,7 +115,7 @@ packages on the Bioconductor page
 
 The recent [R for Mass
 Spectrometry](https://www.rformassspectrometry.org/) initiative, and
-the [documetation book](https://rformassspectrometry.github.io/docs/)
+the [documetation book](https://rformassspectrometry.github.io/book/)
 provide further details and state-of-the-art infrastructure for MS and
 proteomics data analysis.
 
