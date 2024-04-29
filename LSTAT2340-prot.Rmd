@@ -24,7 +24,7 @@ link-citations: no
 
 # Biological information flow
 
-```{r infoflow, results='markup', fig.margin=TRUE, fig.cap="Information flow in biological systems (Source *Central dogma of biology* on Wikipedia).", fig.width=5, fig.height=5, echo=FALSE}
+```{r infoflow, results='markup', fig.margin=TRUE, fig.cap="Information flow in biological systems (Source *Central dogma of biology* on Wikipedia).", fig.width=5, fig.height=5, echo=FALSE, purl=FALSE}
 knitr::include_graphics("figure/centraldogma.png")
 ```
 
@@ -44,7 +44,7 @@ ribosomial machinery into **proteins** directly into the endoplasmic
 reticulum (ER) where they are then redirected to their final
 destination.
 
-```{r cell, fig.cap="Sub-cellular structure of an animal cell (Source *Cell biology* on Wikipedia).", echo=FALSE, out.width = "100%"}
+```{r cell, fig.cap="Sub-cellular structure of an animal cell (Source *Cell biology* on Wikipedia).", echo=FALSE, out.width = "100%", purl=FALSE}
 knitr::include_graphics("figure/cell.png")
 ```
 In addition to the standard information worflow where DNA is
@@ -62,7 +62,7 @@ same genome. The complement of all the expressed proteins, termed the
 proteome is however very different.
 
 
-```{r metam, results='markup', fig.margin=FALSE, fig.cap="The metamorphosis from a caterpilar to a monarch butterfly. (Image from Phys.org)", echo=FALSE, out.width = "100%"}
+```{r metam, results='markup', fig.margin=FALSE, fig.cap="The metamorphosis from a caterpilar to a monarch butterfly. (Image from Phys.org)", echo=FALSE, out.width = "100%", purl=FALSE}
 knitr::include_graphics("figure/metam.jpg")
 ```
 
@@ -84,7 +84,7 @@ mass spectrometry and data analysis.
 
 # Setup
 
-```{r sticker, fig.cap = "The `MSnbase` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
+```{r sticker, fig.cap = "The `MSnbase` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
 knitr::include_graphics("figure/MSnbase.png")
 ```
 
@@ -119,7 +119,7 @@ the [documetation book](https://rformassspectrometry.github.io/book/)
 provide further details and state-of-the-art infrastructure for MS and
 proteomics data analysis.
 
-```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
+```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
 knitr::include_graphics("./figure/RforMassSpectrometry.png")
 ```
 
@@ -132,7 +132,7 @@ GC). The time an analytes takes to elute from the chromatography
 column is the *retention time*.
 
 
-```{r chrom, fig.cap="A chromatogram, illustrating the total amount of analytes over the retention time.", echo=FALSE, out.width = "100%"}
+```{r chrom, fig.cap="A chromatogram, illustrating the total amount of analytes over the retention time.", echo=FALSE, out.width = "100%", purl=FALSE}
 knitr::include_graphics("./figure/chromatogram.png")
 ```
 
@@ -172,7 +172,7 @@ the observed, experimental spectrum to theoratical spectra (see
 details below).
 
 
-```{r ms2, fig.cap="Schematics of a mass spectrometer and two rounds of MS.", echo=FALSE, out.width = "100%"}
+```{r ms2, fig.cap="Schematics of a mass spectrometer and two rounds of MS.", echo=FALSE, out.width = "100%", purl=FALSE}
 knitr::include_graphics("figure/SchematicMS2.png")
 ```
 
@@ -181,7 +181,7 @@ different M/Z values) are separated throughout the MS analysis and are
 eventually detected (i.e. quantified). The final frame shows the
 hypothetical spectrum.
 
-```{r mstut, fig.cap="Separation and detection of ions in a mass spectrometer.", echo=FALSE, out.width = "80%"}
+```{r mstut, fig.cap="Separation and detection of ions in a mass spectrometer.", echo=FALSE, out.width = "80%", purl=FALSE}
 knitr::include_graphics("figure/mstut.gif")
 ```
 
@@ -193,7 +193,7 @@ red (orange) vertical line on the MS1 spectrum and the fragment
 spectra are shown on the MS2 spectrum on the top (bottom) right
 figure.
 
-```{r ms, fig.cap="Parent ions in the MS1 spectrum (left) and two sected fragment ions MS2 spectra (right).", echo=FALSE, out.width = "100%"}
+```{r ms, fig.cap="Parent ions in the MS1 spectrum (left) and two sected fragment ions MS2 spectra (right).", echo=FALSE, out.width = "100%", purl=FALSE}
 knitr::include_graphics("figure/MS1-MS2-spectra.png")
 ```
 
@@ -202,7 +202,7 @@ spectra (M/Z and intensity) of retention time, as well as the
 interleaved nature of MS1 and MS2 (and there could be more levels)
 data.
 
-```{r ms1s, fig.cap="MS1 spectra (blue) over retention time (left). MS2 spectra (pink) interleaved between two MS1 spectra (right),", echo=FALSE, fig.fullwidth=TRUE, out.width = "90%"}
+```{r ms1s, fig.cap="MS1 spectra (blue) over retention time (left). MS2 spectra (pink) interleaved between two MS1 spectra (right),", echo=FALSE, fig.fullwidth=TRUE, out.width = "90%", purl=FALSE}
 knitr::include_graphics("figure/ms3D.png")
 ```
 
@@ -309,7 +309,7 @@ it breaks at specific bonds, producing sets of peaks (*a*, *b*, *c*
 and *x*, *y*, *z*) that can be predicted.
 
 
-```{r frag, results='markup', fig.margin=FALSE, fig.cap="Peptide fragmentation.", echo=FALSE}
+```{r frag, results='markup', fig.margin=FALSE, fig.cap="Peptide fragmentation.", echo=FALSE, purl=FALSE}
 knitr::include_graphics("figure/frag.png")
 ```
 
@@ -348,7 +348,7 @@ millions of observed spectra.
     annotation data.
 
 
-```{marginfigure}
+```{marginfigure, purl=FALSE}
 **Statistical challenge** The matching between millions of observed
   and possible spectra causes real challenges due to the large search
   space and the risk of false positives. See [@Kall:2008] for further
@@ -359,7 +359,7 @@ millions of observed spectra.
 From the list of identified peptides, it is then necessary to infer the
 most provable proteins that were present in the biological sample.
 
-```{marginfigure}
+```{marginfigure, purl=FALSE}
 **Statistical challenge** Protein inference is a difficult task, as
   peptides often match multiple proteins (either different isoforms or
   proteins stemming from different gene but with identical domains),
@@ -404,7 +404,7 @@ and whether the quantitation is performed in MS1 or MS2.
 In spectral counting, on simply counts the number of quantified
 peptides that are assigned to a protein.
 
-```{r sc, echo=FALSE, out.width = "75%"}
+```{r sc, echo=FALSE, out.width = "75%", purl=FALSE}
 knitr::include_graphics("./figure/pbase.png")
 ```
 
@@ -422,7 +422,7 @@ themselves, and result in a set of sample specific peaks. These
 specific peaks can be used to infer sample-specific quantitation,
 while the rest of the MS2 spectrum is used for identification.
 
-```{r itraq, echo=FALSE, out.width = "75%"}
+```{r itraq, echo=FALSE, out.width = "75%", purl=FALSE}
 knitr::include_graphics("./figure/itraq.png")
 ```
 
@@ -433,7 +433,7 @@ identified peptide are integrated of retention time and the area under
 that *extracted ion chromatogram* is used to quantify that peptide in
 that sample.
 
-```{r lf, echo=FALSE, out.width = "75%"}
+```{r lf, echo=FALSE, out.width = "75%", purl=FALSE}
 knitr::include_graphics("./figure/chrompeaks.png")
 ```
 
@@ -451,13 +451,13 @@ light ones, and the ratio between the height of a heavy and light
 peaks can be used to calculate peptide and protein fold-changes.
 
 
-```{r silab, echo=FALSE, out.width = "75%"}
+```{r silab, echo=FALSE, out.width = "75%", purl=FALSE}
 knitr::include_graphics("./figure/Silac.png")
 ```
 
 Figure: credit Wikimedia Commons.
 
-```{marginfigure}
+```{marginfigure, purl=FALSE}
 **Statistical challenge** These different quantitation techniques come
   with their respective and distinct challenges, such as large
   quantities of raw data processing, data transformation and
@@ -509,7 +509,7 @@ head(fData(msnset))
 
 # Quantitative data processing
 
-```{marginfigure}
+```{marginfigure, purl=FALSE}
 **Statistical challenge** Quantitative data processing come with
   numerous statistical challenges such as missing data handling,
   aggregation of quantitation data, data normalisation, ... and the
@@ -550,7 +550,7 @@ other omics data.
 
 # Applications in statistical learning
 
-```{r sticker3, fig.cap = "The `pRoloc` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE}
+```{r sticker3, fig.cap = "The `pRoloc` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
 knitr::include_graphics("figure/pRoloc.png")
 ```
 
