@@ -84,43 +84,31 @@ mass spectrometry and data analysis.
 
 # Setup
 
-```{r sticker, fig.cap = "The `MSnbase` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
-knitr::include_graphics("figure/MSnbase.png")
+```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
+knitr::include_graphics("./figure/RforMassSpectrometry.png")
 ```
 
-We are going to use the Bioconductor [@Huber:2015] `MSnbase` package
-[@Gatto:2012;@Gatto:2020], which can be install with the `BiocManager`
-package, available from CRAN. If `BiocManager` isn't available on your
-computer, install it with:
+We are to use the software infrastructure from the [R for Mass
+Spectrometry](https://www.rformassspectrometry.org/) initiative to
+load, handle and process mass spectrometry and proteomics data. This
+document provides a short overview. For more details, consult the
+[documentation book](https://rformassspectrometry.github.io/book/).
+
+The *R for Mass Spectrometry* package are part of the Bioconductor
+[@Huber:2015] project, and we'll use the `BiocManager` package,
+(available from CRAN), to install them. If `BiocManager` isn't
+available on your computer, install it with:
 
 
 ```{r setup1, eval = FALSE}
 install.packages("BiocManager")
 ```
 
-Now, install `MSnbase` and its dependencies with
+Now, install the `Spectra`, `PSMatch` and `QFeatures` packages and
+their respective dependencies with
 
 ```{r setup2, eval = FALSE}
-BiocManager::install("MSnbase")
-```
-
-For additional information on how to analyse mass spectrometry-based
-proteomics data, refer to [@Gatto:2014] and [@biocmsprot], or explore
-the the
-[proteomics-](http://bioconductor.org/packages/release/BiocViews.html#___Proteomics)
-and [mass
-spectrometry-](http://bioconductor.org/packages/release/BiocViews.html#___MassSpectrometry)related
-packages on the Bioconductor page
-
-
-The recent [R for Mass
-Spectrometry](https://www.rformassspectrometry.org/) initiative, and
-the [documetation book](https://rformassspectrometry.github.io/book/)
-provide further details and state-of-the-art infrastructure for MS and
-proteomics data analysis.
-
-```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
-knitr::include_graphics("./figure/RforMassSpectrometry.png")
+BiocManager::install(c("Spectra", "PSMatch", "QFeatures"))
 ```
 
 # How does mass spectrometry work?
@@ -130,7 +118,6 @@ molecules (ions) based on their mass to charge ratio (M/Z). It is
 often coupled to chromatography (liquid LC, but can also be gas-based
 GC). The time an analytes takes to elute from the chromatography
 column is the *retention time*.
-
 
 ```{r chrom, fig.cap="A chromatogram, illustrating the total amount of analytes over the retention time.", echo=FALSE, out.width = "100%", purl=FALSE}
 knitr::include_graphics("./figure/chromatogram.png")
