@@ -215,7 +215,7 @@ from the `MSnbase` package. The file that we are going to load is also
 available in the package.
 
 1. Load the `MSnbase` package
-```{r loadmsnbase, message = FALSE}
+```{r loadmsnbase, message = FALSE, warning = FALSE}
 library("MSnbase")
 ```
 
