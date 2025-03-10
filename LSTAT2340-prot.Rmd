@@ -104,13 +104,29 @@ available on your computer, install it with:
 install.packages("BiocManager")
 ```
 
-Now, install the `Spectra`, `PSMatch` and `QFeatures` packages and
-their respective dependencies with
+Now, install the `Spectra`, `mzR`, `PSMatch` and `QFeatures` packages
+and their respective dependencies with
 
 ```{r setup2, eval = FALSE}
-BiocManager::install(c("Spectra", "PSMatch", "QFeatures"))
+BiocManager::install(c("Spectra", "mzR", "PSMatch", "QFeatures"))
 ```
 
+We will be using data accessible through the `MsDataHub` package.
+
+```{r setup2, eval = FALSE}
+BiocManager::install("MsDataHub")
+```
+
+
+```{r loadall, message = FALSE, warning = FALSE, echo = FALSE}
+suppressPackageStartupMessages({
+    library("Spectra")
+    library("mzR")
+    library("PSMatch")
+    library("QFeatures")
+    library("MsDataHub")
+})
+```
 # How does mass spectrometry work?
 
 Mass spectrometry (MS) is a technology that *separates* charged
@@ -197,38 +213,32 @@ knitr::include_graphics("figure/ms3D.png")
 
 # Reading and accessing MS data
 
-Let's read a very small raw MS data file into R using the `readMSData`
-from the `MSnbase` package. The file that we are going to load is also
-available in the package.
 
-1. Load the `MSnbase` package
-```{r loadmsnbase, message = FALSE}
-library("MSnbase")
-```
-
-2. Get the path to the `dummyiTRAQ.mzXML` file
-
-```{r rawf, message = FALSE}
-rawf <- dir(system.file(package = "MSnbase", dir = "extdata"),
-            full.name = TRUE,
-            pattern = "mzXML$")
-basename(rawf)
-```
-
-3. Read it in using the `readMSData` function.
-
-```{r readms}
-x <- readMSData(rawf)
-x
-```
-
-The object that is returned by `readMSData` is of class `MSnExp`, that
-can store, access and manipulate raw MS data. Note that here we are
-focusing on MS-based proteomics data, but this also applied to
-MS-based metabolomics data.
+1. Let's start by downloading the data we need. The data are only
+   downloaded one, and cached for later re-use. The command below will
+   provide us with the path the an `mzML` file, an community-developed
+   open format to mass spectrometry data.
 
 ```{r}
-class(x)
+f <- MsDataHub::TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01.20141210.mzML.gz()
+```
+
+2. We can now load the content of the file using the `Spectra`
+   constructor from the `Spectra` package.
+
+```{r spectra}
+library("Spectra")
+sp <- Spectra(f)
+```
+
+
+3. The object that is returned by `Spectra` is of class `Spectra`,
+   that can store, access and manipulate raw MS data. Note that here
+   we are focusing on MS-based proteomics data, but this also applied
+   to MS-based metabolomics data.
+
+```{r}
+class(sp)
 ```
 
 4. We can find out how many spectra are available in that data using
@@ -236,7 +246,7 @@ class(x)
    of thousands spectra.
 
 ```{r}
-length(x)
+length(sp)
 ```
 
 5. We can use various accessor function to get the MS level of these
@@ -244,46 +254,21 @@ length(x)
    precursor peaks of the ion corresponding to the MS2 spectra.
 
 ```{r}
-msLevel(x)
-rtime(x)
-precursorMz(x)
-precursorIntensity(x)
+table(msLevel(sp))
+range(rtime(sp))
+na.omit(precursorMz(sp))
+na.omit(precursorIntensity(sp))
 ```
 
-6. We can also extract individual spectra using `[[` and plot them.
+6. We can also extract subset of the `Spectra` object using `[` and plot them.
 
 ```{r}
-x[[3]]
+sp[101]
 ```
 
 ```{r, fig.cap = "Visualisation of the 3rd MS spectrum in our small test data set."}
-plot(x[[3]])
+plotSpectra(sp[101])
 ```
-
-## Exercise
-
-For the rest of this tutorial, we will be using a
-slightly larger dataset (still tiny compared to full acquisitions)
-that is distributed with the `MSnbase` package. Load it as shown below
-and compute the number of spectra available in that dataset, their MS
-level, and the retention time range over which these spectra have been
-acquired.
-
-```{r}
-data(itraqdata)
-```
-
-<details>
-```{r}
-length(itraqdata)
-unique(msLevel(itraqdata))
-formatRt(range(rtime(itraqdata)))
-```
-</details>
-
-This object also contains additional metadata for each spectrum, that
-can be accessed, as a `data.frame`, with `fData`.
-
 
 # Identification
 
@@ -300,22 +285,30 @@ and *x*, *y*, *z*) that can be predicted.
 knitr::include_graphics("figure/frag.png")
 ```
 
+
+Let's load the `PSMatch` package that will allow us to handle
+identificaiton data.
+
+```{r loadpsmmatch}
+library("PSMatch")
+```
+
 It is thus possible to calculate the expected set of fagment peaks for
 a given peptide, such as *SIGFEGDSIGR* below.
 
 
 ```{r calcfrag}
-calculateFragments("SIGFEGDSIGR")
+calculateFragments("IMIDLDGTENK")
 ```
 
 The last step is to compare obseved and expected peaks. If there is a
 good match, the MS2 spectrum is assigned the peptide sequence.
 
 ```{r, echo=TRUE, fig.cap = "Matching observed and expected peaks."}
-itraqdata2 <- pickPeaks(itraqdata, verbose = FALSE)
-s <- "SIGFEGDSIGR"
-plot(itraqdata2[[14]], s, main = s)
+s <- "IMIDLDGTENK"
+plotSpectra(sp[24], label = addFragments)
 ```
+
 
 It is also possible to plot 2 spectra to compare them directly.
 
