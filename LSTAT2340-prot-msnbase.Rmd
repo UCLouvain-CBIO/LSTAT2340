@@ -84,39 +84,44 @@ mass spectrometry and data analysis.
 
 # Setup
 
-We are going to use Bioconductor [@Huber:2015] packages from the [R
-for Mass Spectrometry](https://www.rformassspectrometry.org/)
-initiative. The associated
-[book](https://rformassspectrometry.github.io/book/) provide further
-details and state-of-the-art infrastructure for MS and proteomics data
-analysis.
-
-```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
-knitr::include_graphics("./figure/RforMassSpectrometry.png")
+```{r sticker, fig.cap = "The `MSnbase` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
+knitr::include_graphics("figure/MSnbase.png")
 ```
 
-Packages can be install with the `BiocManager` package, available from
-CRAN. If `BiocManager` isn't available on your computer, install it
-with:
+We are going to use the Bioconductor [@Huber:2015] `MSnbase` package
+[@Gatto:2012;@Gatto:2020], which can be install with the `BiocManager`
+package, available from CRAN. If `BiocManager` isn't available on your
+computer, install it with:
+
 
 ```{r setup1, eval = FALSE}
 install.packages("BiocManager")
 ```
 
-Any packages (such as `Spectra`) and their dependencies can be
-installed with:
+Now, install `MSnbase` and its dependencies with
 
 ```{r setup2, eval = FALSE}
-BiocManager::install("Spectra")
+BiocManager::install("MSnbase")
 ```
 
 For additional information on how to analyse mass spectrometry-based
 proteomics data, refer to [@Gatto:2014] and [@biocmsprot], or explore
-the
+the the
 [proteomics-](http://bioconductor.org/packages/release/BiocViews.html#___Proteomics)
 and [mass
 spectrometry-](http://bioconductor.org/packages/release/BiocViews.html#___MassSpectrometry)related
 packages on the Bioconductor page
+
+
+The recent [R for Mass
+Spectrometry](https://www.rformassspectrometry.org/) initiative, and
+the [documetation book](https://rformassspectrometry.github.io/book/)
+provide further details and state-of-the-art infrastructure for MS and
+proteomics data analysis.
+
+```{r sticker2, fig.cap = "The *R for Mass Spectrometry* intiative.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
+knitr::include_graphics("./figure/RforMassSpectrometry.png")
+```
 
 # How does mass spectrometry work?
 
@@ -205,39 +210,38 @@ knitr::include_graphics("figure/ms3D.png")
 
 # Reading and accessing MS data
 
-Let's read a very small raw MS data file into R using the `Spectra()`
-from the `r BiocStyle::Biocpkg("Spectra")` package
-[@Spectra:2026]. The file that we are going to load is available in
-the `r BiocStyle::Biocpkg("MsDataHub")` data package.
+Let's read a very small raw MS data file into R using the `readMSData`
+from the `MSnbase` package. The file that we are going to load is also
+available in the package.
 
-1. Load the `Spectra` package
-```{r loadspectra, message = FALSE, warning = FALSE}
-library("Spectra")
+1. Load the `MSnbase` package
+```{r loadmsnbase, message = FALSE, warning = FALSE}
+library("MSnbase")
 ```
 
-2. Get the path to the raw MS data file. When you run this command for
-   the first time, it will download the MS data file in a local cache
-   so that next time you need it, it can be retrieved directly.
+2. Get the path to the `dummyiTRAQ.mzXML` file
 
 ```{r rawf, message = FALSE}
-library("MsDataHub")
-(rawf <- TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01.20141210.mzML.gz())
+rawf <- dir(system.file(package = "MSnbase", dir = "extdata"),
+            full.name = TRUE,
+            pattern = "mzXML$")
+basename(rawf)
 ```
 
-3. Load the MS data into R using the `Spectra()` importer function.
+3. Read it in using the `readMSData` function.
 
 ```{r readms}
-sp <- Spectra(rawf)
-sp
+x <- readMSData(rawf)
+x
 ```
 
-The object that is returned by `Spectra()` is of class `Specta`, that
+The object that is returned by `readMSData` is of class `MSnExp`, that
 can store, access and manipulate raw MS data. Note that here we are
 focusing on MS-based proteomics data, but this also applied to
 MS-based metabolomics data.
 
 ```{r}
-class(sp)
+class(x)
 ```
 
 4. We can find out how many spectra are available in that data using
@@ -245,7 +249,7 @@ class(sp)
    of thousands spectra.
 
 ```{r}
-length(sp)
+length(x)
 ```
 
 5. We can use various accessor function to get the MS level of these
@@ -253,45 +257,46 @@ length(sp)
    precursor peaks of the ion corresponding to the MS2 spectra.
 
 ```{r}
-msLevel(sp)
-rtime(sp)
-precursorMz(sp)
-precursorIntensity(sp)
+msLevel(x)
+rtime(x)
+precursorMz(x)
+precursorIntensity(x)
 ```
 
-6. We can also extract subsets of the full experiment or individual
-   spectra using `[` and plot them.
+6. We can also extract individual spectra using `[[` and plot them.
 
 ```{r}
-sp[3]
+x[[3]]
 ```
 
 ```{r, fig.cap = "Visualisation of the 3rd MS spectrum in our small test data set."}
-plotSpectra(sp[1119])
+plot(x[[3]])
 ```
 
-## Exercises
+## Exercise
 
-`Spectra` objects also contains additional metadata for each spectrum,
-that can be accessed, as a `DataFrame`, with `spectraData`. What
-variables are available?
+For the rest of this tutorial, we will be using a
+slightly larger dataset (still tiny compared to full acquisitions)
+that is distributed with the `MSnbase` package. Load it as shown below
+and compute the number of spectra available in that dataset, their MS
+level, and the retention time range over which these spectra have been
+acquired.
+
+```{r}
+data(itraqdata)
+```
 
 <details>
 ```{r}
-spectraData(sp)
-spectraVariables(sp)
+length(itraqdata)
+unique(msLevel(itraqdata))
+formatRt(range(rtime(itraqdata)))
 ```
 </details>
 
-The actual MS data, i.e. the M/Z and intensity pairs are accessed with
-the `peaksData()` function, that returns a list of matrices. Extract
-the peaks of the spectra 1, 1119, 2235 and 7500.
+This object also contains additional metadata for each spectrum, that
+can be accessed, as a `data.frame`, with `fData`.
 
-<details>
-```{r}
-peaksData(sp[c(1, 1119, 2235, 7500)])
-```
-</details>
 
 # Identification
 
@@ -309,40 +314,27 @@ knitr::include_graphics("figure/frag.png")
 ```
 
 It is thus possible to calculate the expected set of fagment peaks for
-a given peptide, such as *SIGFEGDSIGR* below. We will make use of the
-`r BiocStyle::Biocpkg("PSMatch")` package [@PSMatch:2026] to handle
-identification data.
+a given peptide, such as *SIGFEGDSIGR* below.
+
 
 ```{r calcfrag}
-library("PSMatch")
 calculateFragments("SIGFEGDSIGR")
 ```
 
-To illustrate this, we are going to use data from the [following
-file](https://github.com/UCLouvain-CBIO/LSTAT2340/raw/refs/heads/master/itraqdata2-spectra.rds). Once
-downloaded, let's load it to obtain a `Spectra` object that contains
-identified spectra.
-
-```{r readrds}
-spi <- readRDS("itraqdata2-spectra.rds")
-```
-
-The identification process aims to to compare obseved and expected
-peaks. If there is a good match, the MS2 spectrum is assigned the
-peptide sequence. Below, we use the `plotSpectraPTM()` function that
-automatically annotates the peaks based on the
+The last step is to compare obseved and expected peaks. If there is a
+good match, the MS2 spectrum is assigned the peptide sequence.
 
 ```{r, echo=TRUE, fig.cap = "Matching observed and expected peaks."}
+itraqdata2 <- pickPeaks(itraqdata, verbose = FALSE)
 s <- "SIGFEGDSIGR"
-plotSpectraPTM(spi[14])
+plot(itraqdata2[[14]], s, main = s)
 ```
 
-It is also possible to plot 2 spectra (that for example match the same
-sequence) to compare them directly
+It is also possible to plot 2 spectra to compare them directly.
 
 ```{r, fig.cap = "Direct comparison of 2 MS2 spectra."}
-spi[c(25, 28)]$sequence
-plotSpectraMirror(spi[25], spi[28])
+plot(itraqdata2[[25]], itraqdata2[[28]],
+     sequences = rep("IMIDLDGTENK", 2))
 ```
 
 In a full experiment, all possible peptides from the known (or
@@ -376,6 +368,23 @@ most provable proteins that were present in the biological sample.
   peptides at hand. See [@Nesvizhskii:2005] for further reading.
 
 ```
+
+
+## Exercise
+
+Plot the 44th spectrum of the `itraqdata2` experiment. The sequence
+can be accessed in the feature metadata with
+
+```{r}
+fData(itraqdata2)$PeptideSequence[[44]]
+```
+
+<details>
+```{r}
+plot(itraqdata2[[44]], s,
+     main = fData(itraqdata2)$PeptideSequence[[44]])
+```
+</details>
 
 # Quantitation
 
@@ -428,7 +437,7 @@ that sample.
 knitr::include_graphics("./figure/chrompeaks.png")
 ```
 
-Figure: credit [Johannes Rainer](https://github.com/jorainer).
+Figure: credit [Johannes Rainer](https://github.com/jotsetung/).
 
 ## Labelled MS1: SILAC
 
@@ -457,28 +466,46 @@ Figure: credit Wikimedia Commons.
   for the others).
 ```
 
+
 ## Exercise
 
-As the name of the file implies, the data is an iTRAQ-based isobar
+As its name implies, the `itraqdata` is an iTRAQ-based isobar
 quantitation experiment. We can visualise the reporter peaks as
 follows:
 
 ```{r, fig.cap = "Visualisation of the iTRAQ reporter peaks.", echo=TRUE}
-plotSpectra(spi[14])
-plotSpectra(spi[14], xlim = c(114, 117.5))
+plot(itraqdata[[14]], reporters = iTRAQ4, full = TRUE)
 ```
+
+Interpret the figure above.
 
 <details>
 
-From the closed-up figure, we see that the 4 reporter ions indicate
-that there was slightly less of that peptide in the two first samples,
-i.e. those labelled with the 114 and 115 reporters.
+From the closed-up panel, we see that the 4 reporter ions indicate that there
+was slightly less of that peptide in the two first samples, i.e. those labelled
+with the 114 and 115 reporters.
 
 The rest of the spectrum (i.e m/z > 120) correspond to the dissociated
 fragment ions, used for identification.
 
 </details>
 
+
+## Quantification
+We can quantify these four peaks with the `quantify` method, to
+produce and object of class `MSnSet` containing quantitation data. The
+quantitation values can be accessed with `exprs`. This data also
+contains feature metadata that can be accessed with the `fData`
+function.
+
+
+```{r}
+msnset <- quantify(itraqdata, method = "trap",
+                   reporters = iTRAQ4)
+msnset
+head(exprs(msnset))
+head(fData(msnset))
+```
 
 # Quantitative data processing
 
@@ -489,82 +516,39 @@ fragment ions, used for identification.
   effect of these on the downstream statistical tests.
 ```
 
-We will use the `r BiocStyle::Biocpkg("QFeatures")` package to handle
-quantitative data.
+In our examples, we not have processing data for the 55 peptides and 4
+samples. In this data, there is only 1 missing value, corresponding to
+an absent reporter peak. We are going to simply drop that feature.
 
-```{r loadqf, message = FALSE, warning = FALSE}
-library("QFeatures")
-```
-
-Let's start by loading a PSM-level quantitation table into a
-`QFeatures` object:
 
 ```{r}
-data(hlpsms) ## from the QFeature package
-hlpsms
-## Get columns with quantitative data
-## (others contain metadata)
-(quantCols <- grep("^X", colnames(hlpsms)))
-## Parse and load the data
-qf <- readQFeatures(hlpsms, quantCols = quantCols,
-                    name = "psms")
-qf
+table(is.na(exprs(msnset)))
+msnset <- filterNA(msnset)
 ```
 
-
-In label-free experiments, given that each sample is acquired
+In MS1 label-free experiments, given that each sample is acquired
 independently, the proportion of missing values can be as high several
-tens of percent. In such situations, removing features/rows with
-missing values can be too harsh. Imputation is possible (see the
-`impute()` function and documentation), albeit tricky, as different
-mechanisms can be responsible for missing value that appear either at
-random or not at random [@Lazar:2016].
+tens of percent. In such situations, removing rows with missing values
+isn't possible at all. Imputation is possible, albeit tricky, as
+different mechanisms can be responsible for missing value that appear
+either at random or not at random [@Lazar:2016].
 
-In MS-baesd proteomics, we don't acquire data at the protein level,
-given that we cleave our peptides. We thus need to aggregate
-spectrum-level quantitation values into peptide and protein-level data
-using.
+Next, we aggregate the spectrum-level quantitation values into
+protein-level data using the median and the `combineFeatures`
+function:
 
-Below, we illustrate this aggregating values using median aggregation
-and the `aggregateFeatures` function, first from PSMs to peptides,
-then from peptides to proteins.
-
-```{r aggregate}
-qf <- qf |>
-    aggregateFeatures(
-        "psms",
-        name = "peptides",
-        fcol = "Sequence",
-        fun = colMedians) |>
-    aggregateFeatures(
-        "peptides",
-        name = "proteins",
-        fcol = "ProteinDescriptions",
-        fun = colMedians)
-qf
+```{r}
+prots <- combineFeatures(msnset, fcol = "ProteinAccession",
+                         method = "median")
+head(exprs(prots))
 ```
-
-See `?aggregateFeatures` for more details.
 
 Following on from here, many data processing such as normalisation,
 non-specific filtering, and hypothesis testing is very similar to
 other omics data.
 
-You can find more details in the many Bioconductor package
-vignettes. The [R for Mass Spectrometry
-book](https://rformassspectrometry.github.io/book/) provide further
-details and state-of-the-art infrastructure for MS and proteomics data
-analysis.
 
 # Applications in statistical learning
-
-Proteomics can be used for many applications. Simple identification
-and quantitation of proteins in various different biological samples
-to identify differentially abundant proteins (this is possible in bulk
-and single-cells - see the `r BiocStyle::Biocpkg("scp")` package), but
-also analysis of post-translational modifications, interactions
-between proteins, and protein sub-cellular localisation, as
-illustrated below.
 
 ```{r sticker3, fig.cap = "The `pRoloc` package.", out.width = '50%', fig.margin=TRUE, echo=FALSE, purl=FALSE}
 knitr::include_graphics("figure/pRoloc.png")
@@ -574,8 +558,8 @@ In this section, I illustrate a use case of mass spectrometry-based
 proteomics to infer sub-cellular protein localisation and the
 application of statistical learning. This section requires the
 `pRoloc` and `pRolocdata` packages [@Gatto:2014a;@Breckels:2016]. Both
-packages can be installed with the `BiocManager::install()` function,
-as illustrated above.
+packages can be installed with the `BiocManager::install` function, as
+illustrated above.
 
 ```{r, message=FALSE}
 library("pRoloc")
