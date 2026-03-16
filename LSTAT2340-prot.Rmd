@@ -363,7 +363,6 @@ millions of observed spectra.
   reading.
 ```
 
-
 From the list of identified peptides, it is then necessary to infer the
 most provable proteins that were present in the biological sample.
 
@@ -374,7 +373,6 @@ most provable proteins that were present in the biological sample.
   which leads to the definition of protein groups, i.e. sets of
   proteins that can't be distinguished with the set of identified
   peptides at hand. See [@Nesvizhskii:2005] for further reading.
-
 ```
 
 # Quantitation
